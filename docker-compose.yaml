@@ -1,0 +1,35 @@
+version: "3.3"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      - MYSQL_DATABASE=POKEDEX_VICTOR
+      - MYSQL_ROOT_PASSWORD=prod_password
+    expose:
+      - "3306"
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-pprod_password"]
+        interval: 5s
+        timeout: 5s
+        retries: 20
+        
+
+  api:
+    build: .
+    volumes:
+      - .:/usr/app
+      - /usr/app/node_modules
+    ports:
+      - "80:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - MYSQL_DATABASE=POKEDEX_VICTOR
+      - MYSQL_ROOT_PASSWORD=prod_password
+
+volumes:
+  db:
