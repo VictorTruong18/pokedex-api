@@ -1,0 +1,10 @@
+# Setup
+
+## Production environment 
+
+- Install docker
+- docker compose build
+- docker compose up
+
+You know the app is fully launched when you see the message **Database is up** in the console. Then you can start to make calls to the :80 port on your localhost.
+
