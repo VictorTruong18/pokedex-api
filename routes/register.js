@@ -17,6 +17,7 @@ RegisterRouter.post('/',  async(req,res) => {
             lastName,
             login,
             password: encryptedPassword,
+            roles: roles || "USER",
             age,
         })
         return res.status(201).send({id})

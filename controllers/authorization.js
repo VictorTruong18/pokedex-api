@@ -3,7 +3,7 @@ import jwt from 'jsonwebtoken';
 import Dresseur from '../models/dresseur.js';
 
 // CONTROLLERS
-export const checkAuhtorization = async (req,res,next) => {
+export const checkAuthorization = async (req,res,next) => {
     const authorization = req.headers['authorization']
 
     if(!authorization){
