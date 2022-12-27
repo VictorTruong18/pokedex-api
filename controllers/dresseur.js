@@ -4,11 +4,7 @@ export const getDresseur = async(req, res) => {
     const { id } = req.params
 
     try {
-        const dresseur = await Dresseur.findOne({
-            where : {
-                id
-            }
-        })
+        const dresseur = await Dresseur.findById(id)
         if(!dresseur){
             return res.status(404).send("User not found")
         }

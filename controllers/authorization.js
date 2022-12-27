@@ -30,13 +30,23 @@ export const checkAuhtorization = async (req,res,next) => {
 
 export const isDresseurAdmin = async (req,res,next) => {
     const dresseur = await Dresseur.findById(res.locals.requestor.id)
-
+    res.locals.requestor.isAdmin = false
     if(!dresseur){
         return res.status(404).send('User not found')
     }
-    if(!Dresseur.hasRoles(dresseur, "ADMIN")) {
+    if(Dresseur.hasRoles(dresseur, "ADMIN")) {
+        res.locals.requestor.isAdmin = true
+    } 
+    next()
+}
+
+// the id specified on the param belongs to the actual user
+export const isDresseurAccount = async (req,res,next) => {
+    const { id } = req.params
+    if(id != res.locals.requestor.id && !res.locals.requestor.isAdmin){
         return res.status(403).send({error : "You don't have the privilege to do this action"})
     }
+
     next()
 }
 
