@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Dresseur from '../models/dresseur.js';
 
+// CONTROLLERS
 export const checkAuhtorization = async (req,res,next) => {
     const authorization = req.headers['authorization']
 
@@ -27,7 +28,7 @@ export const checkAuhtorization = async (req,res,next) => {
     next()
 }
 
-export const isUserAdmin = async (req,res,next) => {
+export const isDresseurAdmin = async (req,res,next) => {
     const dresseur = await Dresseur.findById(res.locals.requestor.id)
 
     if(!dresseur){
@@ -38,3 +39,4 @@ export const isUserAdmin = async (req,res,next) => {
     }
     next()
 }
+

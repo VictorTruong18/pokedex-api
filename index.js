@@ -19,11 +19,9 @@ const app = express()
 app.use(express.json())
 
 
-// Register route
+// Routes
 app.use('/register', RegisterRouter)
-// Authentification route
 app.use(AuthentificationRouter)
-// Dresseur route
 app.use('/dresseur', DresseurRouter)
 
 

@@ -17,3 +17,4 @@ export const getDresseur = async(req, res) => {
         return res.status(500).send(dresseur)
     }
 }
+

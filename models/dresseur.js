@@ -44,5 +44,12 @@ Dresseur.init({
     timestamps: true,
 })
 
+Dresseur.findById = function(id){
+    return this.findOne({ where: { id: id}})
+};
+
+Dresseur.hasRoles = function(dresseur, role){
+    return dresseur.roles.includes(role)
+}
 
 export default Dresseur
