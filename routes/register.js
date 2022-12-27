@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 
 const RegisterRouter = Router()
 
-RegisterRouter.post('/', async(req,res) => {
+RegisterRouter.post('/',  async(req,res) => {
 
     const { firstName, lastName, login, password, age, roles} = req.body 
     try {
