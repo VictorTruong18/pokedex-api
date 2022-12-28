@@ -9,6 +9,7 @@ import Pokemon from './models/pokemon.js';
 import RegisterRouter from './routes/register.js';
 import AuthentificationRouter from './routes/authentification.js';
 import DresseurRouter from './routes/dresseur.js';
+import PokemonRouter from './routes/pokemon.js';
 
 // Model relationships
 Dresseur.hasMany(Pokemon)
@@ -23,6 +24,7 @@ app.use(express.json())
 app.use('/register', RegisterRouter)
 app.use(AuthentificationRouter)
 app.use('/dresseur', DresseurRouter)
+app.use('/pokemon', PokemonRouter)
 
 
 // Default route

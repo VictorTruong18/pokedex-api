@@ -46,5 +46,17 @@ Pokemon.init({
     timestamps: true,
 })
 
+Pokemon.createOne = function(species, name, level, gender, size, weight, isChromatic, dresseurId){
+    return this.create({
+        species, 
+        name, 
+        level, 
+        gender, 
+        size, 
+        weight, 
+        isChromatic,
+        dresseurId
+    })
+}
 
 export default Pokemon
