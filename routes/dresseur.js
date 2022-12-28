@@ -8,8 +8,10 @@ const DresseurRouter = Router()
 
 DresseurRouter.get('/', [checkAuthorization, getDresseur])
 DresseurRouter.get('/:id', [checkAuthorization, getDresseur])
+
 DresseurRouter.patch('/', [checkAuthorization, modifyDresseur])
 DresseurRouter.patch('/:id', [checkAuthorization, isDresseurAdmin, isDresseurAccount, modifyDresseur])
+
 DresseurRouter.delete('/', [checkAuthorization, deleteDresseur])
 DresseurRouter.delete('/:id', [checkAuthorization, isDresseurAdmin, isDresseurAccount, deleteDresseur])
 

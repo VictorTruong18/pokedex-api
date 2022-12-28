@@ -1,4 +1,26 @@
 import Dresseur from './../models/dresseur.js';
+import bcrypt from 'bcrypt';
+
+export const createDresseur = async(req, res) => {
+    const { firstName, lastName, login, password, age, roles} = req.body 
+    try {
+        // encrypt the password
+        const encryptedPassword = bcrypt.hashSync(password, 5)
+        // create the user and return his id
+        const { id } = await Dresseur.create({
+            firstName, 
+            lastName,
+            login,
+            password: encryptedPassword,
+            roles: roles || "USER",
+            age,
+        })
+        return res.status(201).send({id})
+    } catch(err){
+        console.log(err)
+        return res.status(500).send({"error" : err})
+    }
+}
 
 export const getDresseur = async(req, res) => {
     const id = req.params.id || res.locals.requestor.id
