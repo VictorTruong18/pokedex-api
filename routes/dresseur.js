@@ -6,6 +6,7 @@ import { getDresseur, modifyDresseur, deleteDresseur } from '../controllers/dres
 
 const DresseurRouter = Router()
 
+DresseurRouter.get('/', [checkAuthorization, getDresseur])
 DresseurRouter.get('/:id', [checkAuthorization, getDresseur])
 DresseurRouter.patch('/', [checkAuthorization, modifyDresseur])
 DresseurRouter.patch('/:id', [checkAuthorization, isDresseurAdmin, isDresseurAccount, modifyDresseur])

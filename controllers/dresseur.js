@@ -1,7 +1,7 @@
 import Dresseur from './../models/dresseur.js';
 
 export const getDresseur = async(req, res) => {
-    const { id } = req.params
+    const id = req.params.id || res.locals.requestor.id
     try {
         const dresseur = await Dresseur.findById(id)
         if(!dresseur){
@@ -19,7 +19,7 @@ export const modifyDresseur = async(req, res) => {
     try {
         const dresseur = await Dresseur.findById(id)
         if(!dresseur){
-            return res.status(404).send('Dresseur not found')
+            return res.status(404).send('Dresseur not found verify your access token')
         }
         if(!res.locals.requestor.isAdmin){
             if(patchedInformations.roles){
@@ -40,7 +40,7 @@ export const deleteDresseur = async(req, res) => {
     try {
         const dresseur = await Dresseur.findById(id)
         if(!dresseur){
-            return res.status(404).send('Dresseur not found')
+            return res.status(404).send('Dresseur not found verify your access token')
         }
         dresseur.destroy()
         return res.status(200).send({'Dresseur id erased' : id })
