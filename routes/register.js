@@ -5,7 +5,7 @@ import { checkAuthorization } from '../controllers/authorization.js';
 
 const RegisterRouter = Router()
 
-RegisterRouter.post('/', [checkAuthorization, createDresseur])
+RegisterRouter.post('/', [createDresseur])
 
 
 export default RegisterRouter

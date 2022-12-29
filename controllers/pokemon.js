@@ -8,7 +8,7 @@ export const createPokemon = async(req,res) => {
     }
     try {
         const pokemon = await Pokemon.createOne(species, name, level, gender, size, weight, isChromatic,res.locals.requestor.id)
-        return res.status(201).send({"User just created" : pokemon})
+        return res.status(201).send({"Pokemon just created" : pokemon})
     } catch(err){
         return res.status(500).send({"error" : err})
     }

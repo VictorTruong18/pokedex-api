@@ -12,8 +12,8 @@ import DresseurRouter from './routes/dresseur.js';
 import PokemonRouter from './routes/pokemon.js';
 
 // Model relationships
-Dresseur.hasMany(Pokemon)
-Pokemon.belongsTo(Dresseur, {onDelete: 'cascade'})
+Dresseur.hasMany(Pokemon, {onDelete: 'CASCADE', hooks: true})
+Pokemon.belongsTo(Dresseur)
 
 const app = express()
 
