@@ -13,3 +13,21 @@ export const createPokemon = async(req,res) => {
         return res.status(500).send({"error" : err})
     }
 }
+
+export const modifyPokemon = async(req,res) => {
+    const pokemonId = req.params.id
+    const patchedInformations = req.body
+    console.log("HELLO")
+    try {
+        const pokemon = await Pokemon.findByPk(pokemonId)
+        if(!pokemon){
+            return res.status(404).send("Pokemon does not exist")
+        }
+        const pokemonToUpdate = {...pokemon, ...patchedInformations}
+        const updatedPokemon = await pokemon.update(pokemonToUpdate)
+        return res.status(200).send(updatedPokemon)
+    }catch(err){
+        return res.status(500).send(err)
+    }
+    
+}

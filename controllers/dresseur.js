@@ -16,7 +16,7 @@ export const createDresseur = async(req, res) => {
             age,
         })
         return res.status(201).send({id})
-    } catch(err){
+    } catch(error){
         return res.status(500).send({"error" : err})
     }
 }

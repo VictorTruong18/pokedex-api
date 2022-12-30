@@ -59,4 +59,8 @@ Pokemon.createOne = function(species, name, level, gender, size, weight, isChrom
     })
 }
 
+Pokemon.findById = function(pokemonId){
+    return this.findOne({ where: { id: pokemonId}})
+};
+
 export default Pokemon
