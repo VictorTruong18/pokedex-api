@@ -1,4 +1,5 @@
 import Dresseur from './../models/dresseur.js';
+import Pokemon from '../models/pokemon.js';
 import bcrypt from 'bcrypt';
 
 export const createDresseur = async(req, res) => {
@@ -65,6 +66,17 @@ export const deleteDresseur = async(req, res) => {
         }
         dresseur.destroy()
         return res.status(200).send({'Dresseur id erased' : id })
+    } catch(error){
+        return res.status(500).send(error)
+    }
+}
+
+export const getDresseurPokemon = async(req, res) => {
+    const id = res.locals.requestor.id
+
+    try {
+        const pokemons = await Pokemon.getAllPokemon(id)
+        return res.status(200).send({'All the pokemons' : pokemons })
     } catch(error){
         return res.status(500).send(error)
     }
