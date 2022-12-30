@@ -7,6 +7,7 @@ import { getDresseur, modifyDresseur, deleteDresseur, getDresseurPokemon } from 
 const DresseurRouter = Router()
 
 DresseurRouter.get('/pokemon', [checkAuthorization, getDresseurPokemon])
+DresseurRouter.get('/:dresseur_id/pokemon', [checkAuthorization, getDresseurPokemon])
 
 DresseurRouter.get('/', [checkAuthorization, getDresseur])
 DresseurRouter.get('/:id', [checkAuthorization, getDresseur])

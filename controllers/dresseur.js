@@ -72,7 +72,7 @@ export const deleteDresseur = async(req, res) => {
 }
 
 export const getDresseurPokemon = async(req, res) => {
-    const id = res.locals.requestor.id
+    const id = req.params.dresseur_id || res.locals.requestor.id
 
     try {
         const pokemons = await Pokemon.getAllPokemon(id)
