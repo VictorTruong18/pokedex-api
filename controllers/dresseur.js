@@ -41,7 +41,7 @@ export const modifyDresseur = async(req, res) => {
     try {
         const dresseur = await Dresseur.findById(id)
         if(!dresseur){
-            return res.status(404).send('Dresseur not found verify your access token')
+            return res.status(404).send('Dresseur not found')
         }
         if(!res.locals.requestor.isAdmin){
             if(patchedInformations.roles){
@@ -62,7 +62,7 @@ export const deleteDresseur = async(req, res) => {
     try {
         const dresseur = await Dresseur.findById(id)
         if(!dresseur){
-            return res.status(404).send('Dresseur not found verify your access token')
+            return res.status(404).send('Dresseur not found')
         }
         dresseur.destroy()
         return res.status(200).send({'Dresseur id erased' : id })

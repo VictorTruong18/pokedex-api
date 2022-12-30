@@ -1,5 +1,19 @@
 import Pokemon from "../models/pokemon.js";
 
+export const getPokemon = async(req, res) => {
+    const { id } = req.params 
+
+    try {
+        const pokemon = await Pokemon.findById(id)
+        if(!pokemon){
+            return res.status(404).send('Pokemon was not found')
+        }
+        return res.status(200).send(pokemon)
+    }catch(error){
+        return res.status(500).send({"error" : err})
+    }
+}
+
 
 export const createPokemon = async(req,res) => {
     const { species, name, level, gender, size, weight, isChromatic } = req.body
