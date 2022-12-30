@@ -60,3 +60,20 @@ export const isDresseurPokemon = async(req,res,next) => {
     }
     next()
 }
+
+// the requestor want to modify the owner of a pokemon
+export const isAllowedToModifyOwner = async(req,res,next) => {
+    const {dresseurId} = req.body
+    if(!res.locals.requestor.isAdmin){
+        if(dresseurId){
+            return res.status(404).send({'error': 'As a USER you cant modify the owner of a pokemon'})
+        }
+    }else { // is the dresser existant
+        const dresseur = await Dresseur.findById(dresseurId)
+        if(!dresseur){
+            return res.status(404).send('The owner you want to attribute this pokemon does not exist')
+        }
+    }
+    next()
+}
+
