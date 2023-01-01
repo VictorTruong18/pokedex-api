@@ -77,3 +77,33 @@ export const isAllowedToModifyOwner = async(req,res,next) => {
     next()
 }
 
+export const isAllowedToCreateDresseur = async(req,res,next) => {
+    const authorization = req.headers['authorization']
+    if(!authorization){
+        next()
+    } else {
+        const bearerToken = JSON.parse(authorization)
+        if(Object.keys(bearerToken).length !== 3 || bearerToken['tokenType'] !== 'Bearer'){
+            return res.status(401).send({error: 'Invalid token type'})
+        }
+        try {
+            const parsedDresseur = await jwt.verify(bearerToken['accessToken'], 'ServerInternalPrivateKey')
+            const dresseur = await Dresseur.findById(parsedDresseur.id)
+            if(!dresseur){
+                return res.status(404).send('User not found')
+            }
+            if(Dresseur.hasRoles(dresseur, "ADMIN")) {
+                next()
+            } else {
+                return res.status(404).send({error: 'You need to be ADMIN to create another Dresseur'})
+            }   
+        } catch(err){
+            if(err instanceof jwt.TokenExpiredError){
+                return res.status(401).send({error: 'Token expired'})
+    
+            }
+            return res.status(500).send({error: 'Error with the JWT verification process'})
+        }
+    }
+
+}
