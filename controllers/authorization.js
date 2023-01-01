@@ -78,7 +78,7 @@ export const isAllowedToModifyOwner = async(req,res,next) => {
     try{
         if(!res.locals.requestor.isAdmin){
             if(dresseurId){
-                return res.status(404).send({'error': 'As a USER you cant modify the owner of a pokemon'})
+                return res.status(403).send({'error': 'As a USER you cant modify the owner of a pokemon'})
             }
         }else { // is the dresser existant
             if(dresseurId){
@@ -113,12 +113,12 @@ export const isAllowedToCreateDresseur = async(req,res,next) => {
            
             const dresseur = await Dresseur.findById(parsedDresseur.id)
             if(!dresseur){
-                return res.status(404).send('User not found')
+                return res.status(404).send('User in the access token not found')
             }
             if(Dresseur.hasRoles(dresseur, "ADMIN")) {
                 next()
             } else {
-                return res.status(404).send({error: 'You need to be ADMIN to create another Dresseur'})
+                return res.status(403).send({error: 'You need to be ADMIN to create another Dresseur'})
             }   
         } catch(err){
             if(err instanceof jwt.TokenExpiredError){

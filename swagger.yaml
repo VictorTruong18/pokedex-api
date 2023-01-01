@@ -13,10 +13,14 @@ schemes:
 tags:
   - name: Authentification
     description: API for authentification
-  - name: Dresseurs
-    description: API for Dresseur Ressources
-  - name: Pokemon
-    description: API for Pokemon Ressources
+  - name: Dresseurs - ADMIN
+    description: Log in as admin to try these routes
+  - name: Dresseurs - USER
+    description: Log in as user to try these routes
+  - name: Pokemon - USER
+    description: Log in as user to try these routes
+  - name: Pokemon - ADMIN
+    description: Log in as an admin to try these routes
 
 securityDefinitions:
   Bearer:
@@ -27,6 +31,322 @@ securityDefinitions:
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 
 paths:
+  /pokemon:
+    post:
+      summary: "Manipuler des pokemon - enregistrer un pokemon"
+      tags: ['Pokemon - USER']
+      security:
+      - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              species:
+                type: string
+                example: Pikachu
+              name:
+                type: string
+                example: Tonnerre
+              level:
+                type: integer
+                example: 3
+              gender:
+                type: string
+                example: male
+              size:
+                type: number
+                example: 0.4
+              weight:
+                type: number
+                example: 6
+              isChromatic:
+                type: boolean
+                example: false
+      responses:
+        200 : 
+          description: Successfully got Pokemon info
+    get:
+      summary: "Manipuler des pokemon - reccuperer ses pokemons"
+      tags: ['Pokemon - USER']
+      security:
+      - Bearer: []
+      responses:
+        200 : 
+          description: Successfully got Pokemon list
+    
+
+  /pokemon/{id}:
+    get:
+      summary: "Récupérer des informations d’un pokemon"
+      tags: ['Pokemon - USER']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the Pokemon
+        required: true
+        default: 1
+        type: string   
+      responses:
+        200 : 
+          description: Successfully got Pokemon info
+          
+    patch:
+      summary: "Manipuler des pokemon - modifier un pokemon"
+      tags: ['Pokemon - USER', 'Pokemon - ADMIN']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the Pokemon
+        required: true
+        default: 1
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: GROS TONNERE
+      responses:
+        200 : 
+          description: Successfully modified Pokemon info
+          
+    delete:
+      summary: "Manipuler des pokemon - supprimer un pokemon"
+      tags: ['Pokemon - USER', 'Pokemon - ADMIN']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the Pokemon
+        required: true
+        default: 1
+        type: string
+      responses:
+        200 : 
+          description: Successfully deleted Pokemon info
+  /dresseur:
+    get:
+      summary: "Get the information of the authenticated Dresseur"
+      tags: ['Dresseurs - ADMIN', 'Dresseurs - USER']
+      parameters:
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                  example: leopkmn
+                password:
+                  type: string
+                  example: cynthia
+      security:
+      - Bearer: []
+      
+      responses:
+          200:
+            description: Successfully got the information from the authenticated Dresseur.
+            schema:
+              type: object
+              properties:
+                    id:
+                      type: integer
+                      example: 1
+                    firstName:
+                      type: string
+                      example: leo
+                    lastName:
+                      type: string
+                      example: pokemaster
+                    login:
+                      type: string
+                      example: leopkmn
+                    password:
+                      type: string
+                      example: ejeof4f223
+                    age:
+                      type: integer
+                      example: 25
+                    roles:
+                      type: string
+                      example: USER
+          401:
+            description: You are not connected - Invalid token type - Token expired
+          404:
+            description: Dresseur not found
+          500:
+            description: Error with the JWT verification process - Error while getting the Dresser
+            
+    patch:
+      tags: ['Dresseurs - USER']
+      summary: "Modifier son compte"
+      security:
+      - Bearer: []
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            login:
+              type: string
+              example: sacha_dbp
+      
+      responses:
+        200 : 
+          description: Successfully modified your account
+      
+      
+    delete:
+      summary: "Supprimer son compte"
+      tags: ['Dresseurs - USER']
+      security:
+      - Bearer: []
+    
+      responses:
+        200 : 
+          description: Successfully deleted your account
+  
+  /register:
+    post:
+      summary: "Créer le compte d'un autre dresseur"
+      tags: ['Dresseurs - ADMIN']
+      parameters:
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            firstName:
+              type: string
+              example: Sacha
+            lastName:
+              type: string
+              example: du Bourg-Palette
+            password:
+              type: string
+              example: pikachu
+            login:
+              type: string
+              example: sacha
+            age:
+              type: integer
+              example: 17
+      security:
+      - Bearer: []
+      responses:
+        200:
+          description: Successfully created the Dresseur.
+          schema:
+              type: object
+              properties:
+                    Dresseur created with id:
+                      type: integer
+                      example: 15
+        404:
+          description: User in the access token not found 
+        403:
+          description: You need to be ADMIN to create another Dresseur
+        
+        401:
+          description: Token expired
+        
+        500:
+          description: Error with the JWT verification process
+
+  /dresseur/{id}:
+    get:
+      summary: "Récupérer les informations d’un compte"
+      tags: ['Dresseurs - USER']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the User
+        required: true
+        default: 1
+        type: string   
+      responses:
+        200 : 
+          description: Successfully got USER info
+    patch:
+      summary: "Modifier un compte (dont les droits)"
+      tags: ['Dresseurs - ADMIN']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the User
+        required: true
+        type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            roles:
+              type: string
+              example: ADMIN
+      responses:
+        200:
+          description: Successfully modified the Dresseur.
+          schema:
+              type: object
+              properties:
+                    id:
+                      type: integer
+                      example: 1
+                    firstName:
+                      type: string
+                      example: Sacha
+                    lastName:
+                      type: string
+                      example: du Bourg-Palette
+                    login:
+                      type: string
+                      example: sacha
+                    password:
+                      type: string
+                      example: $2b$05$lQEwGPUDa.0AMuxR3UQmyeQuJK8VwfFn0N6gic3HGgGBxoAX4.sUq
+                    age:
+                      type: integer
+                      example: 17
+                    roles:
+                      type: string
+                      example: ADMIN
+    delete:
+      summary: "Supprimer un compte"
+      tags: ['Dresseurs - ADMIN']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the User
+        required: true
+        type: string   
+      responses:
+        200 : 
+          description: Successfully deleted an account
+     
+
   /authorize:
     get:
       summary: "Give the authorization code"
@@ -47,10 +367,13 @@ paths:
       responses:
         200:
           description: Successfully redirected to the provided URL with the authorization code.
+
         400:
           description: No redirect URL was provided.
+
         401:
           description: The provided client ID is not authorized.
+
 
 
   /oauth/token:
@@ -62,20 +385,17 @@ paths:
         name: client_id
         required: true
         default: OAUTH_TEST_APP
-        schema:
-          type: string
+        type: string
       - in: query
         name: client_secret
         required: true
         default: OAUTH_TEST_APP_SECRET
-        schema:
-          type: string
+        type: string
       - in: query
         name: authorization_code
         required: true
         default: OAUTH_TEST_APP_ACCEPTED
-        schema:
-          type: string
+        type: string
       - in: body
         name: body
         required: true
@@ -91,14 +411,12 @@ paths:
       responses:
         200:
           description: Successfully generated an access token
-          content:
-            application/json:
-              schema:
+          schema:
                 type: object
                 properties:
                   accessToken:
                     type: string
-                    example: abcdefg
+                    example: dewfjeifi552
                   tokenType:
                     type: string
                     example: Bearer
@@ -107,33 +425,9 @@ paths:
                     example: 10m
         400:
           description: No authorization code provided
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: No authorization code provided
         401:
           description: Application is not authorized or login or password is wrong
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Application is not authorized
         404:
           description: User not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: User not found
 
 

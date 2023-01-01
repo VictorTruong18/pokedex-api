@@ -21,7 +21,7 @@ export const createDresseur = async(req, res) => {
             roles: roles || "USER",
             age,
         })
-        return res.status(201).send({id})
+        return res.status(201).send({"Dresseur created with id": id})
     } catch(error){
         return res.status(500).send({"error" : error})
     }
@@ -36,7 +36,7 @@ export const getDresseur = async(req, res) => {
         }
         return res.status(200).send(dresseur)
     } catch(error){
-        return res.status(500).send(error)
+        return res.status(500).send("Error while getting the Dresser")
     }
 }
 
@@ -50,7 +50,7 @@ export const modifyDresseur = async(req, res) => {
         }
         if(!res.locals.requestor.isAdmin){
             if(patchedInformations.roles){
-                return res.status(404).send({'error': 'As a USER you cant modify your priviledge'})
+                return res.status(403).send({'error': 'As a USER you cant modify your priviledge'})
             }
         }
         const dresseurToUpdate = {...dresseur, ...patchedInformations}
