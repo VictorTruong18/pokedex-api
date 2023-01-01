@@ -3,6 +3,7 @@ import Pokemon from '../models/pokemon.js';
 import bcrypt from 'bcrypt';
 import dotenv from 'dotenv';
 import config from './../config.js';
+import { paginate } from './utility.js';
 
 dotenv.config()
 
@@ -84,25 +85,15 @@ export const getDresseurPokemon = async(req, res) => {
 
         const pokemons = await Pokemon.getAllPokemon(id)
 
-        const startIndex = (page - 1) * pageSize
-        const endIndex = page * pageSize
-
-        const previous = page > 1 ? `http://localhost:${config.NODE_APP_PORT}/dresseur/${id}/pokemon?page=${page-1}&pageSize=${pageSize}` : "No page";
-
-        const results = pokemons.slice(startIndex, endIndex)
-
-        // Count the number of pages it will take to show all the content depending on the page size
-        const allThePages = Math.ceil(pokemons.length / pageSize) 
-
-        const next = page < allThePages ? `http://localhost:${config.NODE_APP_PORT}/dresseur/${id}/pokemon?page=${page+1}&pageSize=${pageSize}` : "No page";
-
-
+        const paginationResult = paginate(id,pokemons,page,pageSize)
+        
         return res.status(200).send({
-            'Previous page ' : previous,
-            'Next page ' : next,
-            'All the pokemons' : results
+            'Previous page ' : paginationResult.previous,
+            'Next page ' : paginationResult.next,
+            'All the pokemons' : paginationResult.results
          })
     } catch(error){
-        return res.status(500).send(error)
+        console.log(error)
+        return res.status(500).send({"error" : error})
     }
 }
