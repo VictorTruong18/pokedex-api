@@ -139,19 +139,7 @@ paths:
     get:
       summary: "Get the information of the authenticated Dresseur"
       tags: ['Dresseurs - ADMIN', 'Dresseurs - USER']
-      parameters:
-          - in: body
-            name: body
-            required: true
-            schema:
-              type: object
-              properties:
-                login:
-                  type: string
-                  example: leopkmn
-                password:
-                  type: string
-                  example: cynthia
+  
       security:
       - Bearer: []
       
