@@ -10,7 +10,7 @@ export const getPokemon = async(req, res) => {
         }
         return res.status(200).send(pokemon)
     }catch(error){
-        return res.status(500).send({"error" : err})
+        return res.status(500).send({"error" : error})
     }
 }
 
@@ -29,9 +29,10 @@ export const createPokemon = async(req,res) => {
 }
 
 export const modifyPokemon = async(req,res) => {
-    const pokemonId = req.params.id
-    const patchedInformations = req.body
+    
     try {
+        const pokemonId = req.params.id
+        const patchedInformations = req.body
         const pokemon = await Pokemon.findByPk(pokemonId)
         if(!pokemon){
             return res.status(404).send("Pokemon does not exist")
