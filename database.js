@@ -4,7 +4,7 @@ import { createAdminUser } from './controllers/utility.js';
 
 
 const Database = new Sequelize(
-    "POKEDEX_VICTOR", // database name
+    config.DATABASE_NAME, // database name
     config.DATABASE_USERNAME, // username
     config.DATABASE_PASSWORD, // password
     {
