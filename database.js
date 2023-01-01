@@ -1,5 +1,6 @@
 import { Sequelize } from 'sequelize'
 import config from './config.js';
+import { createAdminUser } from './controllers/utility.js';
 
 
 const Database = new Sequelize(
@@ -13,15 +14,25 @@ const Database = new Sequelize(
     },
 );
 
+const wait = (ms) => new Promise((resolve) => setTimeout(resolve,ms));
+
 (async () => {
-    try {
-        console.log("Config : " , config)
-        await Database.authenticate()
-        await Database.sync()
-        console.log('Database is up')
-    } catch(error){
-        console.error(error)
+    while(true){
+        try {
+            console.log("Config : " , config)
+            await Database.authenticate()
+            await Database.sync()
+            await createAdminUser()
+            console.log('Database is up')
+            break;
+        } catch(error){
+            console.log("Database login unsuccessful retrying in 5 seconds")
+            console.error(error)
+            wait(5000)
+        }
     }
 })()
+
+
 
 export default Database
