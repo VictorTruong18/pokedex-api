@@ -68,6 +68,9 @@ paths:
       responses:
         200 : 
           description: Successfully got Pokemon info
+    
+    
+  /dresseur/pokemon:
     get:
       summary: "Manipuler des pokemon - reccuperer ses pokemons"
       tags: ['Pokemon - USER']
@@ -76,8 +79,6 @@ paths:
       responses:
         200 : 
           description: Successfully got Pokemon list
-    
-
   /pokemon/{id}:
     get:
       summary: "Récupérer des informations d’un pokemon"
