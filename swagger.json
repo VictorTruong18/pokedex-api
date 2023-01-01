@@ -1,0 +1,37 @@
+{
+    "swagger":"2.0",
+    "info":{
+       "title":"Node Backend",
+       "description":"A simple Node Backend REST API",
+       "version":"1.0.0",
+       "contact":{
+          "name":"Victor TRUONG",
+          "email":"victor.truong@epita.fr"
+       }
+    },
+    "components": {
+        "securitySchemes":{
+            "bearerAuth" :{
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }                
+        }
+    },
+    "host":"localhost:8080",
+    "basePath":"/",
+    "schemes":[
+       "http"
+    ],
+    "paths":{
+        "/dresseur/{id}" : {
+            "patch":{
+                "security":[{
+                    "bearerAuth" : []
+                }]
+            }
+        }
+    }
+    
+
+ }

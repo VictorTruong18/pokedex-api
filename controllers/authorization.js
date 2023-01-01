@@ -13,17 +13,18 @@ export const checkAuthorization = async (req,res,next) => {
 
     
     try {
-        const bearerToken = JSON.parse(authorization)
+        const bearerToken = authorization.split(' ')
 
-        if(Object.keys(bearerToken).length !== 3 || bearerToken['tokenType'] !== 'Bearer'){
+        if(bearerToken.length !== 2 || bearerToken[0] !== 'Bearer'){
             return res.status(401).send({error: 'Invalid token type'})
         }
-        res.locals.requestor = await jwt.verify(bearerToken['accessToken'], 'ServerInternalPrivateKey')
+        res.locals.requestor = await jwt.verify(bearerToken[1], 'ServerInternalPrivateKey')
     } catch(err){
         if(err instanceof jwt.TokenExpiredError){
             return res.status(401).send({error: 'Token expired'})
 
         }
+        console.log(err)
         
         return res.status(500).send({error: 'Error with the JWT verification process'})
     }
@@ -100,12 +101,16 @@ export const isAllowedToCreateDresseur = async(req,res,next) => {
         next()
     } else {
         try {
-            const bearerToken = JSON.parse(authorization)
-            if(Object.keys(bearerToken).length !== 3 || bearerToken['tokenType'] !== 'Bearer'){
+          
+
+            const bearerToken = authorization.split(' ')
+
+            if(bearerToken.length !== 2 || bearerToken[0] !== 'Bearer'){
                 return res.status(401).send({error: 'Invalid token type'})
             }
+            const parsedDresseur = await jwt.verify(bearerToken[1], 'ServerInternalPrivateKey')
 
-            const parsedDresseur = await jwt.verify(bearerToken['accessToken'], 'ServerInternalPrivateKey')
+           
             const dresseur = await Dresseur.findById(parsedDresseur.id)
             if(!dresseur){
                 return res.status(404).send('User not found')

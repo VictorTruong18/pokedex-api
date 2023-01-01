@@ -1,0 +1,139 @@
+swagger: "2.0"
+info:
+  title: Pokedex API
+  description: A simple REST API for Pokemon Trainers
+  version: 1.0.0
+  contact:
+    name: Victor TRUONG
+    email: victor.truong@epita.fr
+host: localhost:8080
+basePath: /
+schemes:
+  - http
+tags:
+  - name: Authentification
+    description: API for authentification
+  - name: Dresseurs
+    description: API for Dresseur Ressources
+  - name: Pokemon
+    description: API for Pokemon Ressources
+
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: >-
+      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
+
+paths:
+  /authorize:
+    get:
+      summary: "Give the authorization code"
+      tags: ['Authentification']
+      parameters:
+        - name: client_id
+          in: query
+          required: true
+          type: string
+          default: OAUTH_TEST_APP
+          description: The client ID to be checked.
+        - name: redirect_uri
+          in: query
+          required: true
+          type: string
+          default: http://localhost:8080/authorized
+          description: The URL to redirect to with the authorization 
+      responses:
+        200:
+          description: Successfully redirected to the provided URL with the authorization code.
+        400:
+          description: No redirect URL was provided.
+        401:
+          description: The provided client ID is not authorized.
+
+
+  /oauth/token:
+    post:
+      summary: Generate an access token for a user
+      tags: ['Authentification']
+      parameters:
+      - in: query
+        name: client_id
+        required: true
+        default: OAUTH_TEST_APP
+        schema:
+          type: string
+      - in: query
+        name: client_secret
+        required: true
+        default: OAUTH_TEST_APP_SECRET
+        schema:
+          type: string
+      - in: query
+        name: authorization_code
+        required: true
+        default: OAUTH_TEST_APP_ACCEPTED
+        schema:
+          type: string
+      - in: body
+        name: body
+        required: true
+        schema:
+          type: object
+          properties:
+            login:
+              type: string
+              example: leopkmn
+            password:
+              type: string
+              example: cynthia
+      responses:
+        200:
+          description: Successfully generated an access token
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  accessToken:
+                    type: string
+                    example: abcdefg
+                  tokenType:
+                    type: string
+                    example: Bearer
+                  expiresIn:
+                    type: string
+                    example: 10m
+        400:
+          description: No authorization code provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: No authorization code provided
+        401:
+          description: Application is not authorized or login or password is wrong
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Application is not authorized
+        404:
+          description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: User not found
+
+
