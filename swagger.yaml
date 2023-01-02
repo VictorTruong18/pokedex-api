@@ -1,3 +1,4 @@
+---
 swagger: "2.0"
 info:
   title: Pokedex API
@@ -22,21 +23,21 @@ tags:
   - name: Pokemon - ADMIN
     description: Log in as an admin to try these routes
   - name: Échange
-    description: Exchange pokemons (ps recipient=the one who needs to accept the offer, initiator=the one who creates the offer)
-
+    description: Exchange pokemons (ps recipient=the one who needs to accept the
+      offer, initiator=the one who creates the offer)
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
-    description: >-
-      Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
-
+    description: 'Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".'
 paths:
   /exchange:
     post:
-      summary: "La proposition d’échange de la part d’un des dresseurs à un autre, qui comprend notamment le ou les Pokémons a échangé"
-      tags: ["Échange"]
+      summary: La proposition d’échange de la part d’un des dresseurs à un autre, qui
+        comprend notamment le ou les Pokémons a échangé
+      tags:
+        - Échange
       security:
         - Bearer: []
       parameters:
@@ -50,30 +51,37 @@ paths:
                 type: integer
                 example: 2
               pokemonInitiator:
-                type: integer
-                example: [1, 2, 3]
+                example:
+                  - 1
+                  - 2
+                  - 3
               pokemonRecipient:
                 items:
-                  type: integer
-                  example: [3, 4]
+                  example:
+                    - 3
+                    - 4
       responses:
-        200:
+        "200":
           description: Successfully created exchange request
-
+        404:
+          description: Dresseurs specified don't exist (Initiator and Recipient)
+        400:
+          description: Dresseur can't be recipient and initiator at the same time | Some of the pokemons specified do not exist | You can't exchange pokemon that don't belong to you
     get:
-      summary: "Get all the echanges where the authenticated dresseur is involved"
-      tags: ["Échange"]
+      summary: Get all the echanges where the authenticated dresseur is involved
+      tags:
+        - Échange
       security:
         - Bearer: []
-
       responses:
-        200:
+        "200":
           description: Successfully created exchange request
-
-  /exchange/accept/{id}:
+  "/exchange/accept/{id}":
     get:
-      summary: "L’acceptation de l’échange par l’autre dresseur, auquel cas les Pokémons sont échangés"
-      tags: ["Échange"]
+      summary: L’acceptation de l’échange par l’autre dresseur, auquel cas les
+        Pokémons sont échangés
+      tags:
+        - Échange
       security:
         - Bearer: []
       parameters:
@@ -84,13 +92,13 @@ paths:
           default: 1
           type: string
       responses:
-        200:
+        "200":
           description: Successfully accepted the exchange
-
-  /exchange/decline/{id}:
+  "/exchange/decline/{id}":
     get:
-      summary: "Le refus de l’échange."
-      tags: ["Échange"]
+      summary: Le refus de l’échange.
+      tags:
+        - Échange
       security:
         - Bearer: []
       parameters:
@@ -101,13 +109,13 @@ paths:
           default: 1
           type: string
       responses:
-        200:
+        "200":
           description: Successfully declined the exchange
-
   /pokemon:
     post:
-      summary: "Manipuler des pokemon - enregistrer un pokemon"
-      tags: ["Pokemon - USER"]
+      summary: Manipuler des pokemon - enregistrer un pokemon
+      tags:
+        - Pokemon - USER
       security:
         - Bearer: []
       parameters:
@@ -139,22 +147,117 @@ paths:
                 type: boolean
                 example: false
       responses:
-        200:
-          description: Successfully got Pokemon info
-
+        "201":
+          description: Successfully created a pokemon
+          schema:
+            type: object
+            properties:
+              Pokemon just created:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  species:
+                    type: string
+                    example: Pikachu
+                  name:
+                    type: string
+                    example: Tonnerre
+                  level:
+                    type: integer
+                    example: 3
+                  gender:
+                    type: string
+                    example: male
+                  size:
+                    type: number
+                    format: float
+                    example: 0.4
+                  weight:
+                    type: integer
+                    example: 6
+                  isChromatic:
+                    type: boolean
+                    example: false
+                  dresseurId:
+                    type: integer
+                    example: 1
+                  updatedAt:
+                    type: string
+                    format: date-time
+                    example: 2023-01-02T15:06:22.572Z
+                  createdAt:
+                    type: string
+                    format: date-time
+                    example: 2023-01-02T15:06:22.572Z
+        "500":
+          description: Internal error
   /dresseur/pokemon:
     get:
-      summary: "Manipuler des pokemon - reccuperer ses pokemons"
-      tags: ["Pokemon - USER"]
+      summary: Manipuler des pokemon - reccuperer ses pokemons
+      tags:
+        - Pokemon - USER
       security:
         - Bearer: []
       responses:
-        200:
-          description: Successfully got Pokemon list
-  /pokemon/{id}:
+        "200":
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              Previous page:
+                type: string
+                example: No page
+              Next page:
+                type: string
+                example: http://localhost:80/dresseur/1/pokemon?page=2&pageSize=2
+              All the pokemons:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    species:
+                      type: string
+                      example: Pikachu
+                    name:
+                      type: string
+                      example: Tonnerre
+                    level:
+                      type: integer
+                      example: 3
+                    gender:
+                      type: string
+                      example: male
+                    size:
+                      type: number
+                      format: float
+                      example: 0.4
+                    weight:
+                      type: integer
+                      example: 6
+                    isChromatic:
+                      type: boolean
+                      example: false
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: 2023-01-02T15:06:22.000Z
+                    updatedAt:
+                      type: string
+                      format: date-time
+                      example: 2023-01-02T15:06:22.000Z
+                    dresseurId:
+                      type: integer
+                      example: 1
+  "/pokemon/{id}":
     get:
-      summary: "Récupérer des informations d’un pokemon"
-      tags: ["Pokemon - USER"]
+      summary: Récupérer des informations d’un pokemon
+      tags:
+        - Pokemon - USER
       security:
         - Bearer: []
       parameters:
@@ -165,12 +268,13 @@ paths:
           default: 1
           type: string
       responses:
-        200:
+        "200":
           description: Successfully got Pokemon info
-
     patch:
-      summary: "Manipuler des pokemon - modifier un pokemon"
-      tags: ["Pokemon - USER", "Pokemon - ADMIN"]
+      summary: Manipuler des pokemon - modifier un pokemon
+      tags:
+        - Pokemon - USER
+        - Pokemon - ADMIN
       security:
         - Bearer: []
       parameters:
@@ -190,12 +294,56 @@ paths:
                 type: string
                 example: GROS TONNERE
       responses:
-        200:
+        "200":
           description: Successfully modified Pokemon info
-
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              species:
+                type: string
+                example: Pikachu
+              name:
+                type: string
+                example: Tonnerre
+              level:
+                type: integer
+                example: 3
+              gender:
+                type: string
+                example: male
+              size:
+                type: number
+                format: float
+                example: 0.4
+              weight:
+                type: integer
+                example: 6
+              isChromatic:
+                type: boolean
+                example: false
+              createdAt:
+                type: string
+                format: date-time
+                example: 2023-01-02T15:06:22.000Z
+              updatedAt:
+                type: string
+                format: date-time
+                example: 2023-01-02T15:06:22.000Z
+              dresseurId:
+                type: integer
+                example: 1
+        "403":
+          description: As a USER you cant modify the owner of a pokemon
+        "404":
+          description: The owner you want to attribute this pokemon does not exist
     delete:
-      summary: "Manipuler des pokemon - supprimer un pokemon"
-      tags: ["Pokemon - USER", "Pokemon - ADMIN"]
+      summary: Manipuler des pokemon - supprimer un pokemon
+      tags:
+        - Pokemon - USER
+        - Pokemon - ADMIN
       security:
         - Bearer: []
       parameters:
@@ -206,18 +354,27 @@ paths:
           default: 1
           type: string
       responses:
-        200:
-          description: Successfully deleted Pokemon info
+        "200":
+          description: Successfully deleted Pokemon
+          schema:
+            type: object
+            properties:
+              Pokemon id erased:
+                type: integer
+                example: 1
+        "403":
+          description: You don't have the privilege to modify a Pokemon that doesn't
+            belong to you
   /dresseur:
     get:
-      summary: "Get the information of the authenticated Dresseur"
-      tags: ["Dresseurs - ADMIN", "Dresseurs - USER"]
-
+      summary: Get the information of the authenticated Dresseur
+      tags:
+        - Dresseurs - ADMIN
+        - Dresseurs - USER
       security:
         - Bearer: []
-
       responses:
-        200:
+        "200":
           description: Successfully got the information from the authenticated Dresseur.
           schema:
             type: object
@@ -243,16 +400,17 @@ paths:
               roles:
                 type: string
                 example: USER
-        401:
+        "401":
           description: You are not connected - Invalid token type - Token expired
-        404:
+        "404":
           description: Dresseur not found
-        500:
-          description: Error with the JWT verification process - Error while getting the Dresser
-
+        "500":
+          description: Error with the JWT verification process - Error while getting the
+            Dresser
     patch:
-      tags: ["Dresseurs - USER"]
-      summary: "Modifier son compte"
+      tags:
+        - Dresseurs - USER
+      summary: Modifier son compte
       security:
         - Bearer: []
       parameters:
@@ -265,25 +423,35 @@ paths:
               login:
                 type: string
                 example: sacha_dbp
-
       responses:
-        200:
+        "200":
           description: Successfully modified your account
-
+        "403":
+          description: As a USER you cant modify your priviledge
+        "404":
+          description: Dresseur not found
     delete:
-      summary: "Supprimer son compte"
-      tags: ["Dresseurs - USER"]
+      summary: Supprimer son compte
+      tags:
+        - Dresseurs - USER
       security:
         - Bearer: []
-
       responses:
-        200:
-          description: Successfully deleted your account
-
+        "200":
+          description: Successfully deleted an account
+          schema:
+            type: object
+            properties:
+              Dresseur id erased:
+                type: integer
+                example: 15
+        "404":
+          description: Dresseur not found
   /register:
     post:
-      summary: "Créer le compte d'un autre dresseur"
-      tags: ["Dresseurs - ADMIN"]
+      summary: Créer le compte d'un autre dresseur
+      tags:
+        - Dresseurs - ADMIN
       parameters:
         - in: body
           name: body
@@ -309,7 +477,7 @@ paths:
       security:
         - Bearer: []
       responses:
-        200:
+        "200":
           description: Successfully created the Dresseur.
           schema:
             type: object
@@ -317,21 +485,19 @@ paths:
               Dresseur created with id:
                 type: integer
                 example: 15
-        404:
-          description: User in the access token not found
-        403:
-          description: You need to be ADMIN to create another Dresseur
-
-        401:
+        "401":
           description: Token expired
-
-        500:
+        "403":
+          description: You need to be ADMIN to create another Dresseur
+        "404":
+          description: User in the access token not found
+        "500":
           description: Error with the JWT verification process
-
-  /dresseur/{id}:
+  "/dresseur/{id}":
     get:
-      summary: "Récupérer les informations d’un compte"
-      tags: ["Dresseurs - USER"]
+      summary: Récupérer les informations d’un compte
+      tags:
+        - Dresseurs - USER
       security:
         - Bearer: []
       parameters:
@@ -342,11 +508,48 @@ paths:
           default: 1
           type: string
       responses:
-        200:
-          description: Successfully got USER info
+        "200":
+          description: Successful response
+          schema:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              firstName:
+                type: string
+                example: Leo
+              lastName:
+                type: string
+                example: Pokemaniac
+              login:
+                type: string
+                example: leopkmn
+              password:
+                type: string
+                example: $2b$05$.D4P/fY7oTpp/AcHj5S5wuY2.IsKHDE4WsGd0sXpleQ3uvhfuplyS
+              age:
+                type: integer
+                example: 23
+              roles:
+                type: string
+                example: ADMIN
+              createdAt:
+                type: string
+                format: date-time
+                example: 2023-01-02T14:11:11.000Z
+              updatedAt:
+                type: string
+                format: date-time
+                example: 2023-01-02T14:11:11.000Z
+        "401":
+          description: Token expired
+        "500":
+          description: Internal error
     patch:
-      summary: "Modifier un compte (dont les droits)"
-      tags: ["Dresseurs - ADMIN"]
+      summary: Modifier un compte (dont les droits)
+      tags:
+        - Dresseurs - ADMIN
       security:
         - Bearer: []
       parameters:
@@ -365,7 +568,7 @@ paths:
                 type: string
                 example: ADMIN
       responses:
-        200:
+        "200":
           description: Successfully modified the Dresseur.
           schema:
             type: object
@@ -392,8 +595,9 @@ paths:
                 type: string
                 example: ADMIN
     delete:
-      summary: "Supprimer un compte"
-      tags: ["Dresseurs - ADMIN"]
+      summary: Supprimer un compte
+      tags:
+        - Dresseurs - ADMIN
       security:
         - Bearer: []
       parameters:
@@ -403,13 +607,21 @@ paths:
           required: true
           type: string
       responses:
-        200:
+        "200":
           description: Successfully deleted an account
-
+          schema:
+            type: object
+            properties:
+              Dresseur id erased:
+                type: integer
+                example: 15
+        "404":
+          description: Dresseur not found
   /authorize:
     get:
-      summary: "Give the authorization code"
-      tags: ["Authentification"]
+      summary: Give the authorization code
+      tags:
+        - Authentification
       parameters:
         - name: client_id
           in: query
@@ -424,19 +636,18 @@ paths:
           default: http://localhost:80/authorized
           description: The URL to redirect to with the authorization
       responses:
-        200:
-          description: Successfully redirected to the provided URL with the authorization code.
-
-        400:
+        "200":
+          description: Successfully redirected to the provided URL with the authorization
+            code.
+        "400":
           description: No redirect URL was provided.
-
-        401:
+        "401":
           description: The provided client ID is not authorized.
-
   /oauth/token:
     post:
       summary: Generate an access token for a user
-      tags: ["Authentification"]
+      tags:
+        - Authentification
       parameters:
         - in: query
           name: client_id
@@ -466,7 +677,7 @@ paths:
                 type: string
                 example: cynthia
       responses:
-        200:
+        "200":
           description: Successfully generated an access token
           schema:
             type: object
@@ -480,9 +691,10 @@ paths:
               expiresIn:
                 type: string
                 example: 10m
-        400:
+        
+        "400":
           description: No authorization code provided
-        401:
+        "401":
           description: Application is not authorized or login or password is wrong
-        404:
+        "404":
           description: User not found
