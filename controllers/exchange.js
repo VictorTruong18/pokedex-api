@@ -126,15 +126,15 @@ export const agreeToExchange = async(req,res) => {
         if(pokemonsInitiator.length != null){
             for(let pokemonId of pokemonsInitiator){
                
-                const updatedPokemon = await Pokemon.updateDresseurId(recipient.id, pokemonId)
+                await Pokemon.updateDresseurId(recipient.id, pokemonId)
+                const updatedPokemon =  await Pokemon.findByPk(pokemonId)
                 updatedPokemons.push(updatedPokemon)
             }
         }
         if(pokemonsRecipient.length != null){
             for(let pokemonId of pokemonsRecipient){
-                console.log("RECIPIENT EXCHANGE ", pokemonId, " initiator : ", initiator.id )
                 await Pokemon.updateDresseurId(initiator.id ,pokemonId)
-                const updatedPokemon =  Pokemon.findByPk(pokemonId)
+                const updatedPokemon =  await Pokemon.findByPk(pokemonId)
                 updatedPokemons.push(updatedPokemon)
             }
         }  
@@ -159,7 +159,8 @@ export const disagreeToExchange = async(req,res) => {
         if(exchange.recipient != res.locals.requestor.id){
             return res.status(404).send("You can't reject an exchange you are not the recipient")
         }
-        const declinedExchange = await Exchange.reject(exchange.id)
+        await Exchange.reject(exchange.id)
+        const declinedExchange = await Exchange.findByPk(exchange.id)
         res.status(200).send({"Rejected exchange" : declinedExchange})
     }catch(error){
         console.log(error)
