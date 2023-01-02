@@ -21,6 +21,8 @@ tags:
     description: Log in as user to try these routes
   - name: Pokemon - ADMIN
     description: Log in as an admin to try these routes
+  - name: Échange
+    description: Exchange pokemons (ps recipient=the one who needs to accept the offer, initiator=the one who creates the offer)
 
 securityDefinitions:
   Bearer:
@@ -31,6 +33,82 @@ securityDefinitions:
       Enter the token with the `Bearer: ` prefix, e.g. "Bearer abcde12345".
 
 paths:
+ 
+      
+
+  /exchange:
+    post:
+      summary: "La proposition d’échange de la part d’un des dresseurs à un autre, qui comprend notamment le ou les Pokémons a échangé"
+      tags: ['Échange']
+      security:
+      - Bearer: []
+      parameters:
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              recipient:
+                type: integer
+                example: 2
+              pokemonInitiator:
+                type: integer
+                example: [1,2,3]
+              pokemonRecipient:
+                items:
+                  type: integer
+                  example: [3,4]
+      responses:
+        200 : 
+          description: Successfully created exchange request
+          
+    get:
+      summary: "Get all the echanges where the authenticated dresseur is involved"
+      tags: ['Échange']
+      security:
+      - Bearer: []
+      
+      responses:
+        200 : 
+          description: Successfully created exchange request
+          
+
+  /exchange/accept/{id}:
+    get:
+      summary: "L’acceptation de l’échange par l’autre dresseur, auquel cas les Pokémons sont échangés"
+      tags: ['Échange']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the exchange
+        required: true
+        default: 1
+        type: string   
+      responses:
+        200 : 
+          description: Successfully accepted the exchange
+  
+  /exchange/decline/{id}:
+    get:
+      summary: "Le refus de l’échange."
+      tags: ['Échange']
+      security:
+      - Bearer: []
+      parameters:
+      - in : path
+        name: id
+        description: The id of the exchange
+        required: true
+        default: 1
+        type: string   
+      responses:
+        200 : 
+          description: Successfully declined the exchange
+    
+
   /pokemon:
     post:
       summary: "Manipuler des pokemon - enregistrer un pokemon"
@@ -418,5 +496,7 @@ paths:
           description: Application is not authorized or login or password is wrong
         404:
           description: User not found
+  
 
+    
 
