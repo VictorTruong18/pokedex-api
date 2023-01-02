@@ -51,7 +51,8 @@ Exchange.accept = function(id){
 }
 
 Exchange.reject = function(id){
-    return this.update({status: "rejected"}, {where: {id:id}})
+    this.update({status: "rejected"}, {where: {id:id}})
+    return this.findOne({where: {id: id}})
 }
 
 export default Exchange

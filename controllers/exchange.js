@@ -89,7 +89,7 @@ export const agreeToExchange = async(req,res) => {
         if(exchange.status != "pending"){
             return res.status(400).send("You can only accept pending changes")
         }
-        if(exchange.recipient == res.locals.requestor.id){
+        if(exchange.recipient != res.locals.requestor.id){
             return res.status(404).send("You can't agree to an exchange you are not the recipient")
         }
         const initiator = await Dresseur.findById(exchange.initiator)
@@ -98,7 +98,7 @@ export const agreeToExchange = async(req,res) => {
             return res.status(400).send({error: "Could not find the initiator or the recipient in the db for this exchange"})
         }
         const pokemonsInitiator = parseStringToArray(exchange.pokemonInitiator)
-        const pokemonsRecipient = parseStringToArray(exchange.pokemonsRecipient)
+        const pokemonsRecipient = parseStringToArray(exchange.pokemonRecipient)
         if(pokemonsInitiator.length != null){
             for(let pokemonId of pokemonsInitiator){
                 const pokemon = await Pokemon.findById(pokemonId)
@@ -125,18 +125,42 @@ export const agreeToExchange = async(req,res) => {
         // Change the dresseurId of all the exchanged pokemon
         if(pokemonsInitiator.length != null){
             for(let pokemonId of pokemonsInitiator){
+               
                 const updatedPokemon = await Pokemon.updateDresseurId(recipient.id, pokemonId)
                 updatedPokemons.push(updatedPokemon)
             }
         }
         if(pokemonsRecipient.length != null){
             for(let pokemonId of pokemonsRecipient){
-                const updatePokemon = await Pokemon.updateDresseurId(initiator.id,pokemonId)
-                updatedPokemons.push(updatePokemon)
+                console.log("RECIPIENT EXCHANGE ", pokemonId, " initiator : ", initiator.id )
+                await Pokemon.updateDresseurId(initiator.id ,pokemonId)
+                const updatedPokemon =  Pokemon.findByPk(pokemonId)
+                updatedPokemons.push(updatedPokemon)
             }
         }  
         await Exchange.accept(exchange.id)
         res.status(200).send({"Exchanged pokemons" : updatedPokemons})
+    }catch(error){
+        console.log(error)
+        res.status(500).send("Internal error")
+    }
+}
+
+
+export const disagreeToExchange = async(req,res) => {
+    try{
+        const exchange = await Exchange.findByPk(req.params.id)
+        if(!exchange){
+            return res.status(404).send("Exchange not found")
+        }
+        if(exchange.status != "pending"){
+            return res.status(400).send("You can only reject pending changes")
+        }
+        if(exchange.recipient != res.locals.requestor.id){
+            return res.status(404).send("You can't reject an exchange you are not the recipient")
+        }
+        const declinedExchange = await Exchange.reject(exchange.id)
+        res.status(200).send({"Rejected exchange" : declinedExchange})
     }catch(error){
         console.log(error)
         res.status(500).send("Internal error")
