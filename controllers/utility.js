@@ -45,3 +45,4 @@ export const createAdminUser = async () => {
         console.log(error)
     }
 }
+
