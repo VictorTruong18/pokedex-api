@@ -26,9 +26,8 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve,ms));
             console.log('Database is up')
             break;
         } catch(error){
-            console.log("Database login unsuccessful retrying in 5 seconds")
-            console.error(error)
-            wait(5000)
+            console.log("Database login unsuccessful retrying in 10 seconds - waiting for the db to be fully up")
+            wait(10000)
         }
     }
 })()

@@ -1,4 +1,4 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Op } from 'sequelize'
 import Database from '../database.js'
 import Dresseur from './dresseur.js'
 
@@ -37,5 +37,13 @@ Exchange.init({
     modelName: "exchanges",
     timestamps: true,
 })
+
+Exchange.findAllDresseur = function(id){
+    return this.findAll({where : {[Op.or]: [
+        { pokemonInitiator: id },
+        { pokemonRecipient: id }
+      ]
+  }})
+}
 
 export default Exchange
