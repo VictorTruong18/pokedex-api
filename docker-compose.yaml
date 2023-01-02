@@ -11,11 +11,19 @@ services:
     volumes:
       - db:/var/lib/mysql
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-uroot", "-pprod_password"]
-        interval: 5s
-        timeout: 5s
-        retries: 20
-        
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-uroot",
+          "-pprod_password",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   api:
     build: .
