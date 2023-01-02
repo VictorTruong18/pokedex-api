@@ -56,10 +56,9 @@ paths:
                   - 2
                   - 3
               pokemonRecipient:
-                items:
-                  example:
-                    - 3
-                    - 4
+                example:
+                  - 3
+                  - 4
       responses:
         "200":
           description: Successfully created exchange request
