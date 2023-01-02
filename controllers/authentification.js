@@ -64,7 +64,7 @@ export const generateAccessToken = async(req,res) => {
     const accessToken = jwt.sign(
         {id: dresseur.id, scope: 'USER'}, 
         'ServerInternalPrivateKey', 
-        {expiresIn: '10m'},)
+        {expiresIn: '30m'},)
 
-    return res.status(200).send({accessToken, tokenType:'Bearer', expiresIn:'10m'})
+    return res.status(200).send({accessToken, tokenType:'Bearer', expiresIn:'30m'})
 }

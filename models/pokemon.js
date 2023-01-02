@@ -67,4 +67,9 @@ Pokemon.getAllPokemon = function(dresseur_id){
     return this.findAll({ where : {dresseurId: dresseur_id}})
 };
 
+Pokemon.updateDresseurId = function(dresseurId, pokemonId) {
+    this.update({dresseurId}, {where : {id: pokemonId}})
+    return this.findOne({ where: { id: pokemonId}})
+};
+
 export default Pokemon

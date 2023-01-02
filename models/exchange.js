@@ -40,10 +40,18 @@ Exchange.init({
 
 Exchange.findAllDresseur = function(id){
     return this.findAll({where : {[Op.or]: [
-        { pokemonInitiator: id },
-        { pokemonRecipient: id }
+        { initiator: id },
+        { recipient: id }
       ]
   }})
+}
+
+Exchange.accept = function(id){
+    return this.update({status: "accepted"}, {where: {id:id}})
+}
+
+Exchange.reject = function(id){
+    return this.update({status: "rejected"}, {where: {id:id}})
 }
 
 export default Exchange

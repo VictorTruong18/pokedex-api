@@ -46,3 +46,15 @@ export const createAdminUser = async () => {
     }
 }
 
+export const parseStringToArray = (string) => {
+    if(!string){
+        return []
+    }
+    const splittedString = string.split('.')
+    const result = []
+    splittedString.forEach(part => {
+        result.push(parseInt(part,10));
+    })
+
+    return result
+}
