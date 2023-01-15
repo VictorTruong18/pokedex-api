@@ -30,6 +30,7 @@ export const createExchangeRequest = async (req, res) => {
           if (pokemon.dresseurId != initiator.id) {
             return res.status(400).send({
               error: "You can't exchange pokemon that don't belong to you",
+              
             });
           }
         }

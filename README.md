@@ -1,10 +1,16 @@
 # Node.js README
 
-élève : Victor TRUONG
+Victor TRUONG
 
-all the dotenv variables have not been gitignored to facilate onboarding.
+This project is a CRUD API built in node.js for pokemon trainers. You can register your pokemons, modify them, delete them and exchange them with other trainers. Follow the setup and then you’ll have access to a swagger documentation to help you use the API. 
+
+![Screen Shot 2023-01-02 at 23.06.30.png](Node%20js%20README%208684480253304ac4ab14b3d76986e7c5/Screen_Shot_2023-01-02_at_23.06.30.png)
 
 # Setup
+
+All the dotenv variables have not been gitignored to facilate onboarding. But of course good practice would be to keep them away from the public.
+
+![ash-pokemon.gif](Node%20js%20README%208684480253304ac4ab14b3d76986e7c5/ash-pokemon.gif)
 
 # Production
 
@@ -75,13 +81,13 @@ le ou les Pokémon à échanger ;
     ![Screen Shot 2023-01-02 at 17.11.12.png](Node%20js%20README%208684480253304ac4ab14b3d76986e7c5/Screen_Shot_2023-01-02_at_17.11.12.png)
     
 - Create a dresseur ( just go to the post /register route )
-- Log in as that user you just created ( login sacha psw pikachu )
+- Log in as that user you just created ( login Sacha psw Pikachu )
 - Create two pokemons with user
     
     ![Screen Shot 2023-01-02 at 17.13.19.png](Node%20js%20README%208684480253304ac4ab14b3d76986e7c5/Screen_Shot_2023-01-02_at_17.13.19.png)
     
 
-- Now you have to create an exchange  we’ll say that the USER wants to exchange his two pokemons against  the three of the ADMIN
+- Now you have to create an exchange  we’ll say that the USER wants to exchange his three pokemons against  the two of the ADMIN
 - go to POST /exchange
 - fill the body
 
